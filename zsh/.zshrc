@@ -14,5 +14,9 @@ fi
 # Customize to your needs...
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+# Set default editor to vim
+export VISUAL="/usr/bin/vim"
+export EDITOR="/usr/bin/vim"
+
 # Set Options
 # setopt CLOBBER            # Allows files to be truncated (overwritten)
