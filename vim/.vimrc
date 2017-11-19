@@ -1,8 +1,3 @@
-" Use Vim settings, rather then Vi settings (much better!).
-" " This must be first, because it changes other options as a side effect.
-set nocompatible            " be iMproved, required
-set laststatus=2            " Display the status line. 2 = Always
-
 " ================ Vundle ========================
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -19,11 +14,12 @@ Plugin 'sheerun/vim-polyglot'
 call vundle#end()
 
 " ================ General Config ===================="
+set laststatus=2        " Display the status line. 2 = Always
 set showcmd             " Show incomplete cmds down the bottom
 set showmode            " Show current mode down the bottom
 set visualbell          " No sound
 set autoread            " Reload files changed outside vim
-set nonumber
+set number              " Display line numbers
 set encoding=utf8
 set mouse=a             " Allow mouse clicks to change cursor
 
@@ -31,23 +27,25 @@ set mouse=a             " Allow mouse clicks to change cursor
 " I can quickly press jj to access normal mode
 imap jj <ESC>
 
-
-filetype plugin indent on
-
 " This makes vim act like all other editors, buffers can
 " exist in the background without being in a window.
 " http://items.sjbach.com/319/configuring-vim-right
 set hidden
 set backspace=2
 
-"syntax highlighting is set to on
-set number
-syntax enable
+" \Note: I have \"syntax on" set for onedark.vim
+if !exists("g:syntax_on")
+    syntax enable
+endif
+
 set background=dark
 " colorscheme onedark
 
 "Re-loads the .vimrc on a save
-autocmd! BufWritePost .vimrc source %
+augroup AutoReload
+    autocmd!
+    autocmd BufWritePost .vimrc source %
+augroup END
 
 " ================ Turn Off Swap Files ==============
 set noswapfile
@@ -65,10 +63,10 @@ endif
 
 " ================ Indentation ======================
 set autoindent
-set smartindent
+filetype plugin indent on
 set smarttab
-set shiftwidth=4
 set softtabstop=4
+set shiftwidth=4
 set tabstop=4
 set expandtab
 
@@ -88,7 +86,6 @@ set foldnestmax=3       " Deepest fold is 3 levels
 set nofoldenable        " Dont fold by default
 
 " ================ Completion =======================
-
 set wildmode=list:longest
 set wildmenu                        " Enable ctrl-n and ctrl-p to scroll thru matches
 set wildignore=*.o,*.obj,*~         " Stuff to ignore when tab completing
@@ -109,7 +106,7 @@ set smartcase       " ...unless we type a capital
 
 " ================ Functions ========================
 if !exists('*s:setupWrapping')
-    function s:setupWrapping()
+    function! s:setupWrapping() abort
         set wrap
         set wm=2
         set textwidth=79
@@ -139,10 +136,11 @@ if (empty($TMUX))
 endif
 
 syntax on
-let g:lightline = {
-    \ 'colorscheme':'onedark', 
-    \ }
 colorscheme onedark
+
+let g:lightline = {
+  \ 'colorscheme': 'onedark',
+  \ }
 
 " =============== Cursor Style =======================
 " Change the cursor style depending on which mode vim is on
@@ -164,7 +162,7 @@ if $TERM =~ "^xterm-256color\\|rxvt"
         let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]1337;CursorShape=0\x7\<Esc>\\"
     else
         " Use a vertical line upon starting insert mode
-        let &t_SI = "\033]Plc7c7c7\033[6 q\\033\\"
+        let &t_SI = "\033]Plc7c7c7\033[6 q\033\\"
         " let &t_SI = \"\033[6 q"
         " let &t_SI = \<Esc>]1337;CursorShape=1\x7"
         " CursorShape = 0 (block), 1 (vertical line), 2 (underline)
