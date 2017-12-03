@@ -11,9 +11,10 @@ Plugin 'scrooloose/NERDTree'
 Plugin 'itchyny/lightline.vim'
 Plugin 'joshdick/onedark.vim'
 Plugin 'sheerun/vim-polyglot'
+Plugin 'airblade/vim-gitgutter'
 call vundle#end()
 
-" ================ General Config ===================="
+" ================ General Config ====================
 set laststatus=2        " Display the status line. 2 = Always
 set showcmd             " Show incomplete cmds down the bottom
 set showmode            " Show current mode down the bottom
@@ -27,18 +28,16 @@ set mouse=a             " Allow mouse clicks to change cursor
 " I can quickly press jj to access normal mode
 imap jj <ESC>
 
-" This makes vim act like all other editors, buffers can
-" exist in the background without being in a window.
-" http://items.sjbach.com/319/configuring-vim-right
-set hidden
-set backspace=2
+set hidden              " Hide buffers instead of closing them
+set backspace=2         " Backspace normally (over indents, line breaks, and 
+                        " over characters existing before starting insert mode)
 
 " \Note: I have \"syntax on" set for onedark.vim
 if !exists("g:syntax_on")
     syntax enable
 endif
 
-set background=dark
+" set background=dark
 " colorscheme onedark
 
 "Re-loads the .vimrc on a save
@@ -87,7 +86,7 @@ set nofoldenable        " Dont fold by default
 
 " ================ Completion =======================
 set wildmode=list:longest
-set wildmenu                        " Enable ctrl-n and ctrl-p to scroll thru matches
+set wildmenu                        " Enable ctrl-n and ctrl-p to scroll through matches
 set wildignore=*.o,*.obj,*~         " Stuff to ignore when tab completing
 set wildignore+=*vim/backups*
 set wildignore+=tmp/**
@@ -163,9 +162,8 @@ if $TERM =~ "^xterm-256color\\|rxvt"
     else
         " Use a vertical line upon starting insert mode
         let &t_SI = "\033]Plc7c7c7\033[6 q\033\\"
-        " let &t_SI = \"\033[6 q"
+        " let &t_SI = \"\033[6 q
         " let &t_SI = \<Esc>]1337;CursorShape=1\x7"
-        " CursorShape = 0 (block), 1 (vertical line), 2 (underline)
 
         " Use a rectangular block upon exiting insert mode
         let &t_EI = "\033]Plc7c7c7\033[2 q\033\\"
