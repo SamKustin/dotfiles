@@ -1,17 +1,13 @@
-" ================ Vundle ========================
-" set the runtime path to include Vundle and initialize
+" ================ Plugins ===========================
+" Set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-" call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'scrooloose/NERDTree'
-Plugin 'itchyny/lightline.vim'
-Plugin 'joshdick/onedark.vim'
-Plugin 'sheerun/vim-polyglot'
-Plugin 'airblade/vim-gitgutter'
+Plugin 'VundleVim/Vundle.vim'       " Plugin Manager
+Plugin 'scrooloose/NERDTree'        " Sidebar Directory Tree
+Plugin 'itchyny/lightline.vim'      " Status Line
+Plugin 'joshdick/onedark.vim'       " Colorscheme
+Plugin 'sheerun/vim-polyglot'       " Improved Syntax Highlighting
+Plugin 'airblade/vim-gitgutter'     " Git Diff Indicator
 call vundle#end()
 
 " ================ General Config ====================
@@ -140,6 +136,10 @@ colorscheme onedark
 let g:lightline = {
   \ 'colorscheme': 'onedark',
   \ }
+
+" =============== GitGutter ==========================
+let g:gitgutter_map_keys = 0        " Disable all GitGutter key mappings
+set updatetime=250                  " Set diff marker update/delay time to 250ms
 
 " =============== Cursor Style =======================
 " Change the cursor style depending on which mode vim is on
