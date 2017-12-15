@@ -2,7 +2,7 @@
 call plug#begin('~/.vim/plugged')   " Vim-Plug Plugin Manager
 Plug 'scrooloose/NERDTree'          " Sidebar Directory Tree
 Plug 'itchyny/lightline.vim'        " Status Line
-Plug 'joshdick/onedark.vim'         " Colorscheme
+Plug 'joshdick/onedark.vim'         " One Dark Color Scheme
 Plug 'sheerun/vim-polyglot'         " Improved Syntax Highlighting
 Plug 'airblade/vim-gitgutter'       " Git Diff Indicator
 call plug#end()
@@ -29,9 +29,11 @@ augroup AutoReload
 augroup END
 
 " ============================== Key Mappings ============================== "
-" The escape button is mapped to \"jj\", so in insert mode
-" I can quickly press jj to access normal mode
-imap jj <ESC>
+" Use 'jj' in insert mode to escape back to normal mode
+inoremap jj <ESC>
+
+" Use '\nt' in normal mode to toggle the NERDTree window
+nnoremap <leader>nt :NERDTreeToggle
 
 " ============================== Color Scheme ============================== "
 " \Note: Vim-Plug automatically executes 'syntax enable'
@@ -120,7 +122,7 @@ augroup END
 " Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 " If you're using tmux version 2.2 or later, you can remove the outermost 
 " $TMUX check and use tmux's 24-bit color support
-"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+" (see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more info.)
 if (empty($TMUX))
   if (has("nvim"))
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
@@ -184,6 +186,9 @@ if $TERM =~ "^xterm-256color\\|rxvt"
             " Reset cursor to a vertical bar when vim exits
             autocmd VimLeave * silent !printf "\033]Plc7c7c7\033[6 q\033\\"
             " autocmd VimLeave * silent !printf \"\033[6 q"
+
+            " Removes garbage characters that appear on vim startup
+            autocmd VimEnter * redraw!
         augroup END
     endif
 endif
