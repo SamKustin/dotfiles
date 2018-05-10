@@ -19,4 +19,4 @@ export VISUAL="/usr/local/bin/vim"
 export EDITOR="/usr/local/bin/vim"
 
 # Set Options
-# setopt CLOBBER            # Allows files to be truncated (overwritten)
+setopt CLOBBER            # Allows files to be truncated (overwritten)

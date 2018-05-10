@@ -2,9 +2,14 @@
 call plug#begin('~/.vim/plugged')   " Vim-Plug Plugin Manager
 Plug 'scrooloose/NERDTree'          " Sidebar Directory Tree
 Plug 'itchyny/lightline.vim'        " Status Line
+
 Plug 'joshdick/onedark.vim'         " One Dark Color Scheme
+Plug 'arcticicestudio/nord-vim'     " Nord Color Scheme
+Plug 'cocopon/iceberg.vim'          " Iceberg Color Scheme
+
 Plug 'sheerun/vim-polyglot'         " Improved Syntax Highlighting
 Plug 'airblade/vim-gitgutter'       " Git Diff Indicator
+Plug 'lervag/vimtex'                " Latex Support
 call plug#end()
 
 " ============================ General Config ============================== "
@@ -35,7 +40,27 @@ inoremap jj <ESC>
 " Use '\nt' in normal mode to toggle the NERDTree window
 nnoremap <leader>nt :NERDTreeToggle
 
-" ============================== Color Scheme ============================== "
+" ============================== Color scheme ============================== "
+" Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+" If you're using tmux version 2.2 or later, you can remove the outermost 
+" $TMUX check and use tmux's 24-bit color support
+" (see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more info.)
+if (empty($TMUX))
+  if (has("nvim"))
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+endif
+
+syntax on
+colorscheme nord
+
+let g:lightline = {
+  \ 'colorscheme': 'nord',
+  \ }
+
 " \Note: Vim-Plug automatically executes 'syntax enable'
 " \Note: I have \"syntax on" set for onedark.vim
 " if !exists("g:syntax_on")
@@ -43,7 +68,13 @@ nnoremap <leader>nt :NERDTreeToggle
 " endif
 
 " set background=dark
-" colorscheme onedark
+
+if &term =~ '256color'
+  " Fixes the blacked out background problem 
+  " by disabling background color erase (BCE)
+  " source: https://sunaku.github.io/vim-256color-bce.html
+  set t_ut=
+endif
 
 " =========================== Turn Off Swap Files ========================== "
 set noswapfile
@@ -64,11 +95,11 @@ set autoindent
 " \Note: Vim-Plug automatically executes 'filetype plugin indent on'
 " filetype plugin indent on
 
-set smarttab
-set softtabstop=4
-set shiftwidth=4
-set tabstop=4
-set expandtab
+set smarttab            " Use tabs for indentations of spaces for alignment
+set shiftwidth=4        " Width of shift indentation operators, << and >>
+set softtabstop=4       " Width of tab character in insert mode
+set tabstop=4           " Width of tab character
+set expandtab			" Use spaces instead of tabs
 
 " Auto indent pasted text
 nnoremap p p=`]<C-o>
@@ -87,8 +118,8 @@ set nofoldenable        " Dont fold by default
 
 " =============================== Completion =============================== "
 set wildmode=list:longest
-set wildmenu                        " Enable ctrl-n and ctrl-p to scroll through matches
-set wildignore=*.o,*.obj,*~         " Stuff to ignore when tab completing
+set wildmenu                            " Enable ctrl-n and ctrl-p to scroll through matches
+set wildignore=*.o,*.obj,*~,*.dSYM      " Stuff to ignore when tab completing
 set wildignore+=*vim/backups*
 set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
@@ -118,30 +149,12 @@ augroup vimrc-wrapping
     autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
 augroup END
 
-" ============================== Onedark.vim =============================== "
-" Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-" If you're using tmux version 2.2 or later, you can remove the outermost 
-" $TMUX check and use tmux's 24-bit color support
-" (see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more info.)
-if (empty($TMUX))
-  if (has("nvim"))
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  endif
-  if (has("termguicolors"))
-    set termguicolors
-  endif
-endif
-
-syntax on
-colorscheme onedark
-
-let g:lightline = {
-  \ 'colorscheme': 'onedark',
-  \ }
-
 " =============================== GitGutter ================================ "
 let g:gitgutter_map_keys = 0        " Disable all GitGutter key mappings
 set updatetime=250                  " Set diff marker update/delay time to 250ms
+
+" ============================== VimTex ==================================== "
+let g:vimtex_motion_enabled = 0     " Disable vimtex motion mappings
 
 " ============================== Cursor Style ============================== "
 " Change the cursor style depending on which mode vim is on
@@ -163,18 +176,18 @@ if $TERM =~ "^xterm-256color\\|rxvt"
         let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]1337;CursorShape=0\x7\<Esc>\\"
     else
         " Use a vertical line upon starting insert mode
-        let &t_SI = "\033]Plc7c7c7\033[6 q\033\\"
-        " let &t_SI = \"\033[6 q"
+        let &t_SI = "\033[6 q"
+        " let &t_SI = \"\033]Plc7c7c7\033[6 q\033\\"
         " let &t_SI = \<Esc>]1337;CursorShape=1\x7"
 
         " Use a rectangular block upon exiting insert mode
-        let &t_EI = "\033]Plc7c7c7\033[2 q\033\\"
-        " let &t_EI = \"\033[2 q"
+        let &t_EI = "\033[2 q"
+        " let &t_EI = \"\033]Plc7c7c7\033[2 q\033\\"
         " let &t_EI = \"\<Esc>]1337;CursorShape=0\x7"
 
         " Use a rectangular block upon starting replace mode
-        let &t_SR = "\033]Plc7c7c7\033[2 q\033\\"
-        " let &t_SR = \"\033[2 q"
+        let &t_SR = "\033[2 q"
+        " let &t_SR = \"\033]Plc7c7c7\033[2 q\033\\"
         " let &t_SR = \"\<Esc>]1337;CursorShape=0\x7"
 
         augroup vimrc-cursorstyle
